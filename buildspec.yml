@@ -6,6 +6,13 @@ phases:
         nodejs: 18
     commands:
       - npm install -g aws-cdk
+      - echo installing python 
+      - sudo apt-get update
+      - sudo apt-get install -y python3 python3-pip
+      - python --version
+      - pip install --upgrade pip
+      - pip install awscli
+      - echo 'Installing dependencies'
       - cdk list  
 
   pre_build:
