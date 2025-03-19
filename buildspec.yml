@@ -6,27 +6,14 @@ phases:
         nodejs: 18
     commands:
       - npm install -g aws-cdk
-      - echo installing python 
-      - sudo apt-get update
-      - sudo apt-get install -y python3 python3-pip
-      - python --version
-      - pip install --upgrade pip
-      - pip install awscli
-      - echo 'Installing dependencies'
+      - cdk list  
 
   pre_build:
     commands:
-      - mkdir -p package
-      - pip install -r requirements.txt -t package/
-      - cd package
-      - version="1.0.0-$(date +%Y%m%d-%H%M)"
-      - zip -r ../lambda_${version}.zip .
-      - cd ..
-      - aws s3 cp lambda_${version}.zip s3://containers3bucket/my-deployment-package.zip
-      - aws lambda update-function-code --function-name lambda_report --s3-bucket containers3bucket --s3-key my-deployment-package.zip
+      - echo Not implemented  yet
   build:
     commands:
-      - Not implemented  yet'
+      - echo Not implemented  yet
        #- cd iac/cdk
        #- echo 'Deploying the following Cloud formation stacks'
        #- cdk list -c environment=${ENVIRONMENT} -c region=${REGION}
