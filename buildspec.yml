@@ -1,22 +1,32 @@
 version: 0.2
+
 phases:
   install:
     runtime-versions:
-      python: 3.13
+        nodejs: 18
     commands:
-      - echo "Installing dependencies..."
-      - pip install -r requirements.txt -t lib
+      - npm install -g aws-cdk
+      - echo installing python3.13
+      - sudo apt-get update
+      - sudo apt-get install -y python3.13 python3-pip
+      - pip install --upgrade pip
+      - pip install awscli
+      - echo 'Installing dependencies'
+
+  pre_build:
+    commands:
+      - mkdir -p package
+      - pip install -r requirements.txt -t package/
+      - cd package
+      - version="1.0.0-$(date +%Y%m%d-%H%M)"
+      - zip -r ../lambda_${version}.zip .
+      - cd ..
+      - aws s3 cp lambda_${version}.zip s3://containers3bucket/my-deployment-package.zip
+      - aws lambda update-function-code --function-name lambda_report --s3-bucket containers3bucket --s3-key my-deployment-package.zip
   build:
     commands:
-      - echo "Zipping deployment package..."
-      - cd lib
-      - zip -r9 ../deployment_package.zip .
-      - cd ..
-      - zip -g deployment_package.zip lambda_function.py
-  post_build:
-    commands:
-      - echo "Updating lambda Function..."
-      - aws lambda update-function-code --function-name a204896-test_lambda_deploy --zip-file fileb://deployment_package.zip
-      - echo "DONE!!"
-
-      
+      - Not implemented  yet'
+       #- cd iac/cdk
+       #- echo 'Deploying the following Cloud formation stacks'
+       #- cdk list -c environment=${ENVIRONMENT} -c region=${REGION}
+       #- cdk deploy '*' --require-approval never -c environment=${ENVIRONMENT} -c region=${REGION} --toolkit-stack-name a206145-CdkToolkit
